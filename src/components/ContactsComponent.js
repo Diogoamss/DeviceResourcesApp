@@ -4,6 +4,8 @@ import * as Contacts from 'expo-contacts';
 import { FontAwesome } from "@expo/vector-icons";
 
 const ContactsComponent = () => {
+    const [contacts, setContacts] = useState([]);
+    
     const laodContacts = async () => {
         const { status } = await Contacts.requestPermissionsAsync()
 
@@ -24,7 +26,7 @@ const ContactsComponent = () => {
             }
         } catch (erro) {
             Alert.alert('Erro', 'Ocorreu um erro ao carregar os contatos.');
-            console.error(error);
+            console.error(erro);
         }
     };
 
@@ -33,7 +35,7 @@ const ContactsComponent = () => {
     }, []);
 
     const renderItem = ({ item }) => (
-        <View style={styles.constactItem}>
+        <View style={styles.contactItem}>
             <Text style={styles.contactName}>
                 {item.firstName} {item.lastName}
             </Text>
@@ -60,8 +62,8 @@ const ContactsComponent = () => {
             <Button title="Recarregar Contatos" onPress={laodContacts} />
 
             <FlatList 
-                data={Contacts}
-                keyExtractor={(item) => item.id}
+                data={contacts}
+                keyExtractor={(item) => String(item.id)}
                 renderItem={renderItem}
                 contentContainerStyle={styles.list}
             />
@@ -82,7 +84,7 @@ const styles = StyleSheet.create({
     contactItem: {
         padding: 15,
         borderBottomWidth: 1,
-        borderColor: #eee,
+        borderColor: '#eee',
     },
     contactName: {
         fontSize: 18,
